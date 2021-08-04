@@ -16,11 +16,9 @@ import java.util.List;
  */
 public interface VendingMachineDao {
 
-    void addItem(VendingMachineItem item);
+    VendingMachineItem addItem(VendingMachineItem item);
     
     VendingMachineItem getItem(int itemId);
-    
-    int incrementItem(VendingMachineItem item);
     
     int decrementItem(VendingMachineItem item);
     

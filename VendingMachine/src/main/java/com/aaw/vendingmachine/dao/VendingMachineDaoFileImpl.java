@@ -13,4 +13,12 @@ package com.aaw.vendingmachine.dao;
  */
 public class VendingMachineDaoFileImpl implements VendingMachineDao{
 
+    public VendingMachineDaoFileImpl(){
+        
+    }
+    
+    public VendingMachineDaoFileImpl(String fileName){
+        
+    }
+    
 }

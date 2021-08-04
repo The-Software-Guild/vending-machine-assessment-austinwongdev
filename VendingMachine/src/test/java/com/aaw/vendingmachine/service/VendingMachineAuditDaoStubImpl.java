@@ -7,10 +7,20 @@
 
 package com.aaw.vendingmachine.service;
 
+import com.aaw.vendingmachine.dao.VendingMachineAuditDao;
+import com.aaw.vendingmachine.dao.VendingMachinePersistenceException;
+
 /**
  *
  * @author Austin Wong
  */
-public class VendingMachineAuditDaoStubImpl {
+public class VendingMachineAuditDaoStubImpl implements VendingMachineAuditDao {
 
+    @Override
+    public void writeAuditEntry(String entry) 
+            throws VendingMachinePersistenceException{
+        // do nothing
+    }
+    
+    
 }

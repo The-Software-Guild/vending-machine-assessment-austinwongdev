@@ -38,8 +38,92 @@ public class VendingMachineServiceLayerImplTest {
     }
 
     @Test
-    public void testSomeMethod() {
-        fail("The test case is a prototype.");
+    public void testGetItemInvalidItem(){
+        
     }
     
+    @Test
+    public void testGetItemValidItem(){
+        
+    }
+    
+    @Test
+    public void testGetAllItemsNull(){
+        
+    }
+    
+    @Test
+    public void testGetAllItemsNotNull(){
+        
+    }
+    
+    @Test
+    public void testIsItemAvailableTrue(){
+        
+    }
+    
+    @Test
+    public void testIsItemAvailableFalse(){
+        
+    }
+    
+    @Test
+    public void testAddUserMoneyNegative100Cents(){
+        
+    }
+    
+    @Test
+    public void testAddUserMoney0Cents(){
+        
+    }
+    
+    @Test
+    public void testAddUserMoney369Cents(){
+        
+    }
+    
+    @Test
+    public void testGetChangeNegative100Cents(){
+        
+    }
+    
+    @Test
+    public void testGetChange0Cents(){
+        
+    }
+    
+    @Test
+    public void testGetChange369Cents(){
+        
+    }
+    
+    @Test
+    public void testAttemptPurchaseOutOfStock(){
+        
+    }
+    
+    @Test
+    public void testAttemptPurchaseInStock(){
+        
+    }
+    
+    @Test
+    public void testAttemptPurchaseItemNotFound(){
+        
+    }
+    
+    @Test
+    public void testCompareItemPriceToUserMoneyExactAmount(){
+        
+    }
+    
+    @Test
+    public void testCompareItemPriceToUserMoneyInsufficientFunds(){
+        
+    }
+    
+    @Test
+    public void testCompareItemPriceToUserMoneyNeedsChange(){
+        
+    }
 }
