@@ -21,18 +21,24 @@ public class Change {
     private final int nickels;
     private final int pennies;
     
-    public Change(BigDecimal totalInPennies){
+    public Change(BigDecimal totalInPennies) throws NegativeChangeException {
+        
+        if (totalInPennies.compareTo(new BigDecimal("0")) < 0){
+            throw new NegativeChangeException(
+                    "Cannot create change for a negative number.");
+        }
         
         quarters = getNumCoinsAsInt(totalInPennies, Coins.QUARTER);
         totalInPennies = getRemainingPennies(totalInPennies, Coins.QUARTER);
-        
+
         dimes = getNumCoinsAsInt(totalInPennies, Coins.DIME);
         totalInPennies = getRemainingPennies(totalInPennies, Coins.DIME);
-        
+
         nickels = getNumCoinsAsInt(totalInPennies, Coins.NICKEL);
         totalInPennies = getRemainingPennies(totalInPennies, Coins.NICKEL);
-        
+
         pennies = getNumCoinsAsInt(totalInPennies, Coins.PENNY);
+
     }
     
     private int getNumCoinsAsInt(BigDecimal totalAmount, Coins coin){
