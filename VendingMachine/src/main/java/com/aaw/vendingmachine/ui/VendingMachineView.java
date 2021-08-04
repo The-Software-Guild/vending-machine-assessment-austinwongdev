@@ -13,4 +13,10 @@ package com.aaw.vendingmachine.ui;
  */
 public class VendingMachineView {
 
+    private UserIO io;
+    private String menuPrompt = "Please select from the above choices.";
+    
+    public VendingMachineView(UserIO io){
+        this.io = io;
+    }
 }

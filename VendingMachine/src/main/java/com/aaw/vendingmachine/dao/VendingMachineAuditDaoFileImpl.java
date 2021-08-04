@@ -11,6 +11,6 @@ package com.aaw.vendingmachine.dao;
  *
  * @author Austin Wong
  */
-public class VendingMachineAuditDaoFileImpl {
+public class VendingMachineAuditDaoFileImpl implements VendingMachineAuditDao {
 
 }

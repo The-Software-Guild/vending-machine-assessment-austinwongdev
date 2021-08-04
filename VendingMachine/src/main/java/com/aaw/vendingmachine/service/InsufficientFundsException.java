@@ -11,6 +11,13 @@ package com.aaw.vendingmachine.service;
  *
  * @author Austin Wong
  */
-public class InsufficientFundsException {
+public class InsufficientFundsException extends Exception {
 
+    public InsufficientFundsException(String message){
+        super(message);
+    }
+    
+    public InsufficientFundsException(String message, Throwable cause){
+        super(message, cause);
+    }
 }
