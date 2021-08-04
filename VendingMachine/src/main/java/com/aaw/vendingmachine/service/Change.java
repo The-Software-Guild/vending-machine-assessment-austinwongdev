@@ -5,12 +5,12 @@
  * purpose: 
  */
 
-package com.aaw.vendingmachine.dto;
+package com.aaw.vendingmachine.service;
 
 /**
  *
  * @author Austin Wong
  */
-public class Coins {
+public class Change {
 
 }
