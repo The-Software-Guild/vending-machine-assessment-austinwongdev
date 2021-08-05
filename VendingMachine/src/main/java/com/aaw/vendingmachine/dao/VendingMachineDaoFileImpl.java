@@ -7,6 +7,8 @@
 
 package com.aaw.vendingmachine.dao;
 
+import com.aaw.vendingmachine.dto.Change;
+import com.aaw.vendingmachine.dto.NegativeChangeException;
 import com.aaw.vendingmachine.dto.VendingMachineItem;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -16,10 +18,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 /**
  *
@@ -29,57 +31,70 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao{
 
     private final String INVENTORY_FILE;
     private static final String DELIMITER = "::";
-    private Map<Integer, VendingMachineItem> vendingMachine = new HashMap<>();
-    private int nextId = 1;
+    private Map<Integer, VendingMachineItem> inventoryMap = new TreeMap<>();
+    private int nextVendingMachineItemId = 1;
+    private Change userChange;
     
-    public VendingMachineDaoFileImpl(){
+    public VendingMachineDaoFileImpl() throws NegativeChangeException{
+        this.userChange = new Change(new BigDecimal("0.00"));
         this.INVENTORY_FILE = "inventory.txt";
     }
     
-    public VendingMachineDaoFileImpl(String fileName){
-        this.INVENTORY_FILE = fileName;
+    public VendingMachineDaoFileImpl(String inventoryFileName) 
+            throws NegativeChangeException{
+        this.userChange = new Change(new BigDecimal("0.00"));
+        this.INVENTORY_FILE = inventoryFileName;
     }
     
     @Override
-    public VendingMachineItem addItem(VendingMachineItem item){
-        return vendingMachine.put(item.getItemId(), item);
+    public VendingMachineItem addVendingMachineItem(
+            VendingMachineItem vendingMachineItem){
+        return inventoryMap.put(vendingMachineItem.getItemId(), vendingMachineItem);
     }
     
     @Override
-    public VendingMachineItem getItem(int itemId){
-        return vendingMachine.get(itemId);
+    public VendingMachineItem getVendingMachineItem(int vendingMachineItemId){
+        return inventoryMap.get(vendingMachineItemId);
     }
     
     @Override
-    public int decrementItem(VendingMachineItem item){
-        int itemStock = item.getItemStock();
+    public int decrementItemStock(VendingMachineItem vendingMachineItem){
+        int itemStock = vendingMachineItem.getItemStock();
         itemStock -= 1;
-        item.setItemStock(itemStock);
+        vendingMachineItem.setItemStock(itemStock);
         return itemStock;
     }
     
     @Override
-    public List<VendingMachineItem> getAllItems(){
-        return new ArrayList(vendingMachine.values());
+    public Map<Integer, VendingMachineItem> getInventoryMap(){
+        return this.inventoryMap;
     }
     
-    private String marshallItem(VendingMachineItem item){
-        String itemAsString = item.getItemName() + DELIMITER;
-        itemAsString += item.getItemPrice().toString() + DELIMITER;
-        itemAsString += item.getItemStock();
-        return itemAsString;
+    @Override
+    public List<VendingMachineItem> getAllVendingMachineItems(){
+        return new ArrayList(inventoryMap.values());
     }
     
-    private VendingMachineItem unmarshallItem(String itemAsText){
-        String[] itemTokens = itemAsText.split(DELIMITER);
-        int itemId = this.nextId;
+    private String marshallItem(VendingMachineItem vendingMachineItem){
+        String vendingMachineItemAsString = 
+                vendingMachineItem.getItemName() + DELIMITER;
+        vendingMachineItemAsString += 
+                vendingMachineItem.getItemPrice().toString() + DELIMITER;
+        vendingMachineItemAsString += 
+                vendingMachineItem.getItemStock();
+        return vendingMachineItemAsString;
+    }
+    
+    private VendingMachineItem unmarshallItem(String vendingMachineItemAsString){
+        String[] itemTokens = vendingMachineItemAsString.split(DELIMITER);
+        int itemId = this.nextVendingMachineItemId;
         String itemName = itemTokens[0];
         BigDecimal itemPrice = new BigDecimal(itemTokens[1]);
         int itemStock = Integer.parseInt(itemTokens[2]);
-        VendingMachineItem item = 
+        VendingMachineItem vendingMachineItem = 
                 new VendingMachineItem(itemId, itemName, itemPrice, itemStock);
-        this.nextId += 1;
-        return item;
+        this.nextVendingMachineItemId += 1;
+        return vendingMachineItem;
     }
     
     
@@ -100,7 +115,7 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao{
         while (scanner.hasNextLine()){
             currentLine = scanner.nextLine();
             currentItem = unmarshallItem(currentLine);
-            vendingMachine.put(currentItem.getItemId(), currentItem);
+            inventoryMap.put(currentItem.getItemId(), currentItem);
         }
         
         scanner.close();
@@ -117,14 +132,28 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao{
                     "Could not save vending machine inventory data.", e);
         }
         
-        String itemAsText;
-        List<VendingMachineItem> itemList = this.getAllItems();
-        for (VendingMachineItem currentItem : itemList){
-            itemAsText = marshallItem(currentItem);
-            out.println(itemAsText);
+        String vendingMachineItemAsText;
+        List<VendingMachineItem> vendingMachineItemList = 
+                this.getAllVendingMachineItems();
+        for (VendingMachineItem currentItem : vendingMachineItemList){
+            vendingMachineItemAsText = marshallItem(currentItem);
+            out.println(vendingMachineItemAsText);
             out.flush();
         }
         out.close();
+    }
+    
+    @Override
+    public Change setUserChange(BigDecimal newUserChangeTotal) 
+            throws NegativeChangeException{
+        Change newUserChange = new Change(newUserChangeTotal);
+        this.userChange = newUserChange;
+        return this.userChange;
+    }
+    
+    @Override
+    public Change getUserChange(){
+        return this.userChange;
     }
     
 }

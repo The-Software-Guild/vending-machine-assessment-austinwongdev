@@ -9,9 +9,10 @@ package com.aaw.vendingmachine.service;
 
 import com.aaw.vendingmachine.dao.VendingMachinePersistenceException;
 import com.aaw.vendingmachine.dto.Change;
+import com.aaw.vendingmachine.dto.NegativeChangeException;
 import com.aaw.vendingmachine.dto.VendingMachineItem;
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,20 +20,27 @@ import java.util.List;
  */
 public interface VendingMachineServiceLayer {
     
-    List<VendingMachineItem> getAllItems() throws 
-            VendingMachinePersistenceException;
+    void loadInventory() throws VendingMachinePersistenceException;
     
-    VendingMachineItem getItem(int itemId);
+    void saveInventory() throws VendingMachinePersistenceException;
     
-    boolean isItemAvailable(VendingMachineItem item);
+    Map<Integer, VendingMachineItem> getInventoryMap();
     
-    BigDecimal addUserMoney(String moneyToAdd);
+    List<VendingMachineItem> getAllVendingMachineItems();
     
-    Change getChange(BigDecimal totalInPennies);
+    VendingMachineItem getVendingMachineItem(int vendingMachineItemId);
     
-    void attemptPurchase(VendingMachineItem item) throws
-            InsufficientFundsException, NoItemInventoryException;
+    boolean isVendingMachineItemAvailable(VendingMachineItem vendingMachineItem);
     
-    int compareItemPriceToUserMoney(VendingMachineItem item);
+    Change addUserChange(String moneyToAddStr) throws NegativeChangeException;
+    
+    Change getUserChange();
+    
+    Change dispenseChange() throws NegativeChangeException;
+    
+    VendingMachineItem attemptPurchase(VendingMachineItem itemToPurchase) throws
+            InsufficientFundsException, NoItemInventoryException, NegativeChangeException;
+    
+    int compareItemPriceToUserChange(VendingMachineItem itemToCompare);
     
 }

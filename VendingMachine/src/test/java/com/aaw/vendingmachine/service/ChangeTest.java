@@ -32,10 +32,10 @@ public class ChangeTest {
         int expectedDimes = 0;
         int expectedNickels = 0;
         int expectedPennies = 0;
-        assertEquals(expectedQuarters, change.getQuarters(), amountOfMoneyStr + " cents should have 0 quarters.");
-        assertEquals(expectedDimes, change.getDimes(), amountOfMoneyStr + " cents should have 0 dimes.");
-        assertEquals(expectedNickels, change.getNickels(), amountOfMoneyStr + " cents should have 0 nickels.");
-        assertEquals(expectedPennies, change.getPennies(), amountOfMoneyStr + " cents should have 0 pennies.");
+        assertEquals(expectedQuarters, change.getQuarters(), amountOfMoneyStr + " dollars should have 0 quarters.");
+        assertEquals(expectedDimes, change.getDimes(), amountOfMoneyStr + " dollars should have 0 dimes.");
+        assertEquals(expectedNickels, change.getNickels(), amountOfMoneyStr + " dollars should have 0 nickels.");
+        assertEquals(expectedPennies, change.getPennies(), amountOfMoneyStr + " dollars should have 0 pennies.");
     }
     
     @Test
@@ -61,10 +61,10 @@ public class ChangeTest {
         int expectedDimes = 0;
         int expectedNickels = 0;
         int expectedPennies = 1;
-        assertEquals(expectedQuarters, change.getQuarters(), amountOfMoneyStr + " cents should have 0 quarters.");
-        assertEquals(expectedDimes, change.getDimes(), amountOfMoneyStr + " cents should have 0 dimes.");
-        assertEquals(expectedNickels, change.getNickels(), amountOfMoneyStr + " cents should have 0 nickels.");
-        assertEquals(expectedPennies, change.getPennies(), amountOfMoneyStr + " cents should have 1 pennies.");
+        assertEquals(expectedQuarters, change.getQuarters(), amountOfMoneyStr + " dollars should have 0 quarters.");
+        assertEquals(expectedDimes, change.getDimes(), amountOfMoneyStr + " dollars should have 0 dimes.");
+        assertEquals(expectedNickels, change.getNickels(), amountOfMoneyStr + " dollars should have 0 nickels.");
+        assertEquals(expectedPennies, change.getPennies(), amountOfMoneyStr + " dollars should have 1 pennies.");
     }
     
     @Test
@@ -80,10 +80,10 @@ public class ChangeTest {
         int expectedDimes = 0;
         int expectedNickels = 1;
         int expectedPennies = 0;
-        assertEquals(expectedQuarters, change.getQuarters(), amountOfMoneyStr + " cents should have 0 quarters.");
-        assertEquals(expectedDimes, change.getDimes(), amountOfMoneyStr + " cents should have 0 dimes.");
-        assertEquals(expectedNickels, change.getNickels(), amountOfMoneyStr + " cents should have 1 nickel.");
-        assertEquals(expectedPennies, change.getPennies(), amountOfMoneyStr + " cents should have 0 pennies.");
+        assertEquals(expectedQuarters, change.getQuarters(), amountOfMoneyStr + " dollars should have 0 quarters.");
+        assertEquals(expectedDimes, change.getDimes(), amountOfMoneyStr + " dollars should have 0 dimes.");
+        assertEquals(expectedNickels, change.getNickels(), amountOfMoneyStr + " dollars should have 1 nickel.");
+        assertEquals(expectedPennies, change.getPennies(), amountOfMoneyStr + " dollars should have 0 pennies.");
     }
     
     @Test
@@ -99,10 +99,10 @@ public class ChangeTest {
         int expectedDimes = 1;
         int expectedNickels = 0;
         int expectedPennies = 0;
-        assertEquals(expectedQuarters, change.getQuarters(), amountOfMoneyStr + " cents should have 0 quarters.");
-        assertEquals(expectedDimes, change.getDimes(), amountOfMoneyStr + " cents should have 1 dime.");
-        assertEquals(expectedNickels, change.getNickels(), amountOfMoneyStr + " cents should have 0 nickels.");
-        assertEquals(expectedPennies, change.getPennies(), amountOfMoneyStr + " cents should have 0 pennies.");
+        assertEquals(expectedQuarters, change.getQuarters(), amountOfMoneyStr + " dollars should have 0 quarters.");
+        assertEquals(expectedDimes, change.getDimes(), amountOfMoneyStr + " dollars should have 1 dime.");
+        assertEquals(expectedNickels, change.getNickels(), amountOfMoneyStr + " dollars should have 0 nickels.");
+        assertEquals(expectedPennies, change.getPennies(), amountOfMoneyStr + " dollars should have 0 pennies.");
     }
     
     @Test
@@ -118,10 +118,10 @@ public class ChangeTest {
         int expectedDimes = 0;
         int expectedNickels = 0;
         int expectedPennies = 0;
-        assertEquals(expectedQuarters, change.getQuarters(), amountOfMoneyStr + " cents should have 1 quarter.");
-        assertEquals(expectedDimes, change.getDimes(), amountOfMoneyStr + " cents should have 0 dimes.");
-        assertEquals(expectedNickels, change.getNickels(), amountOfMoneyStr + " cents should have 0 nickels.");
-        assertEquals(expectedPennies, change.getPennies(), amountOfMoneyStr + " cents should have 0 pennies.");
+        assertEquals(expectedQuarters, change.getQuarters(), amountOfMoneyStr + " dollars should have 1 quarter.");
+        assertEquals(expectedDimes, change.getDimes(), amountOfMoneyStr + " dollars should have 0 dimes.");
+        assertEquals(expectedNickels, change.getNickels(), amountOfMoneyStr + " dollars should have 0 nickels.");
+        assertEquals(expectedPennies, change.getPennies(), amountOfMoneyStr + " dollars should have 0 pennies.");
     }   
     
     @Test
@@ -137,9 +137,36 @@ public class ChangeTest {
         int expectedDimes = 1;
         int expectedNickels = 1;
         int expectedPennies = 4;
-        assertEquals(expectedQuarters, change.getQuarters(), amountOfMoneyStr + " cents should have 14 quarters.");
-        assertEquals(expectedDimes, change.getDimes(), amountOfMoneyStr + " cents should have 1 dime.");
-        assertEquals(expectedNickels, change.getNickels(), amountOfMoneyStr + " cents should have 1 nickel.");
-        assertEquals(expectedPennies, change.getPennies(), amountOfMoneyStr + " cents should have 4 pennies.");
+        assertEquals(expectedQuarters, change.getQuarters(), amountOfMoneyStr + " dollars should have 14 quarters.");
+        assertEquals(expectedDimes, change.getDimes(), amountOfMoneyStr + " dollars should have 1 dime.");
+        assertEquals(expectedNickels, change.getNickels(), amountOfMoneyStr + " dollars should have 1 nickel.");
+        assertEquals(expectedPennies, change.getPennies(), amountOfMoneyStr + " dollars should have 4 pennies.");
     }
+    
+    @Test
+    public void testGetSetTotalInDollars() throws NegativeChangeException{
+        String amountOfMoneyStr = "3.69";
+        BigDecimal amountOfMoney = new BigDecimal(amountOfMoneyStr);
+        String amountOfMoneyStr2 = "4.00";
+        BigDecimal expectedAmountOfMoney = new BigDecimal(amountOfMoneyStr2);
+        Change change = new Change(amountOfMoney);
+        
+        change.setTotalInDollars(expectedAmountOfMoney);
+        BigDecimal returnedAmountOfMoney = change.getTotalInDollars();
+        
+        assertNotNull(returnedAmountOfMoney, "Change should return a BigDecimal.");
+        assertEquals(expectedAmountOfMoney, returnedAmountOfMoney,
+                "Change should return 4.00.");
+        
+        int expectedQuarters = 16;
+        int expectedDimes = 0;
+        int expectedNickels = 0;
+        int expectedPennies = 0;
+        assertEquals(expectedQuarters, change.getQuarters(), amountOfMoneyStr2 + " dollars should have 16 quarters.");
+        assertEquals(expectedDimes, change.getDimes(), amountOfMoneyStr2 + " dollars should have 0 dimes.");
+        assertEquals(expectedNickels, change.getNickels(), amountOfMoneyStr2 + " dollars should have 0 nickels.");
+        assertEquals(expectedPennies, change.getPennies(), amountOfMoneyStr2 + " dollars should have 0 pennies.");
+        
+    }
+    
 }

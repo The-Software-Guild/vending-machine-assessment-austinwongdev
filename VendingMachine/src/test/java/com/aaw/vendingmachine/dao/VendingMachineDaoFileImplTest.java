@@ -5,6 +5,8 @@
  */
 package com.aaw.vendingmachine.dao;
 
+import com.aaw.vendingmachine.dto.Change;
+import com.aaw.vendingmachine.dto.NegativeChangeException;
 import com.aaw.vendingmachine.dto.VendingMachineItem;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -27,13 +29,15 @@ public class VendingMachineDaoFileImplTest {
     private final String TEST_FILE_WITHOUT_DATA = "testInventoryWithoutData.txt";
     
     @BeforeEach
-    public void setUp() throws IOException {
+    public void setUp() throws IOException, NegativeChangeException {
+        // Reset Test File each time to make sure it's blank.
         new FileWriter(TEST_FILE_WITHOUT_DATA);
-        this.testDaoWithoutData = new VendingMachineDaoFileImpl(TEST_FILE_WITHOUT_DATA);
+        this.testDaoWithoutData = 
+                new VendingMachineDaoFileImpl(TEST_FILE_WITHOUT_DATA);
     }
 
     @Test
-    public void testAddGetItem(){
+    public void testAddGetVendingMachineItem(){
         int itemId = 1;
         int itemStock = 5;
         BigDecimal itemPrice = new BigDecimal("3.00");
@@ -41,14 +45,14 @@ public class VendingMachineDaoFileImplTest {
         VendingMachineItem item = 
                 new VendingMachineItem(itemId, itemName, itemPrice, itemStock);
         
-        testDaoWithoutData.addItem(item);
-        VendingMachineItem returnedItem = testDaoWithoutData.getItem(itemId);
+        testDaoWithoutData.addVendingMachineItem(item);
+        VendingMachineItem returnedItem = testDaoWithoutData.getVendingMachineItem(itemId);
         assertNotNull(returnedItem, "Returned item should not be null.");
         assertEquals(item, returnedItem, "Returned item should be Cheetos.");
     }
     
     @Test
-    public void testAddGetAllItems(){
+    public void testAddGetAllVendingMachineItems(){
         int item1Id = 1;
         int item1Stock = 5;
         BigDecimal item1Price = new BigDecimal("3.00");
@@ -67,27 +71,27 @@ public class VendingMachineDaoFileImplTest {
         expectedList.add(item1);
         expectedList.add(item2);
         
-        testDaoWithoutData.addItem(item1);
-        testDaoWithoutData.addItem(item2);
-        List<VendingMachineItem> allItems = testDaoWithoutData.getAllItems();
+        testDaoWithoutData.addVendingMachineItem(item1);
+        testDaoWithoutData.addVendingMachineItem(item2);
+        List<VendingMachineItem> allItems = testDaoWithoutData.getAllVendingMachineItems();
         
         assertNotNull(allItems, "Returned list should not be null.");
         assertEquals(expectedList, allItems);
     }
     
     @Test
-    public void testGetAllItemsEmpty(){
+    public void testGetAllVendingMachineItemsEmpty(){
         
         List<VendingMachineItem> emptyList = new ArrayList<>();
         
-        List<VendingMachineItem> allItems = testDaoWithoutData.getAllItems();
+        List<VendingMachineItem> allItems = testDaoWithoutData.getAllVendingMachineItems();
         
         assertNotNull(allItems, "Returned list should not be null.");
         assertEquals(emptyList, allItems, "Returned list should be empty.");
     }
     
     @Test
-    public void testDecrementItem(){
+    public void testDecrementItemStock(){
         int item1Id = 1;
         int item1Stock = 5;
         BigDecimal item1Price = new BigDecimal("3.00");
@@ -97,14 +101,16 @@ public class VendingMachineDaoFileImplTest {
         
         int expectedItem1Stock = item1Stock - 1;
         
-        testDaoWithoutData.addItem(item1);
-        item1Stock = testDaoWithoutData.decrementItem(item1);
+        testDaoWithoutData.addVendingMachineItem(item1);
+        item1Stock = testDaoWithoutData.decrementItemStock(item1);
         
         assertEquals(expectedItem1Stock, item1Stock, "Cheetos should have a stock of 4.");
     }
     
     @Test
-    public void testSaveLoadInventory() throws VendingMachinePersistenceException {
+    public void testSaveLoadInventory() throws VendingMachinePersistenceException, NegativeChangeException {
+        
+        
         
         int item1Id = 1;
         int item1Stock = 2;
@@ -120,16 +126,16 @@ public class VendingMachineDaoFileImplTest {
         VendingMachineItem item2 = 
                 new VendingMachineItem(item1Id, item1Name, item1Price, item1Stock);
         
-        testDaoWithoutData.addItem(item1);
-        testDaoWithoutData.addItem(item2);
-        List<VendingMachineItem> expectedItems = testDaoWithoutData.getAllItems();
+        testDaoWithoutData.addVendingMachineItem(item1);
+        testDaoWithoutData.addVendingMachineItem(item2);
+        List<VendingMachineItem> expectedItems = testDaoWithoutData.getAllVendingMachineItems();
         
         testDaoWithoutData.saveInventory();
         testDaoWithoutData = new VendingMachineDaoFileImpl(TEST_FILE_WITHOUT_DATA);
         List<VendingMachineItem> returnedItemsBeforeLoading = 
-                testDaoWithoutData.getAllItems();
+                testDaoWithoutData.getAllVendingMachineItems();
         testDaoWithoutData.loadInventory();
-        List<VendingMachineItem> returnedItems = testDaoWithoutData.getAllItems();
+        List<VendingMachineItem> returnedItems = testDaoWithoutData.getAllVendingMachineItems();
         
         assertNotEquals(expectedItems, returnedItemsBeforeLoading, 
                 "Inventory should be reset to be empty.");
@@ -137,4 +143,20 @@ public class VendingMachineDaoFileImplTest {
         assertEquals(expectedItems, returnedItems, 
                 "Loaded inventory does not match saved inventory.");
     }    
+    
+    @Test
+    public void testGetSetUserChange() throws NegativeChangeException{
+        
+        BigDecimal totalAmount = new BigDecimal("2.25");
+        Change expectedChange = new Change(totalAmount);
+        
+        Change resultAfterSetting = testDaoWithoutData.setUserChange(totalAmount);
+        Change resultAfterGetting = testDaoWithoutData.getUserChange();
+        
+        assertNotNull(resultAfterSetting, "Change after setting should not be null.");
+        assertNotNull(resultAfterGetting, "Change after getting should not be null.");
+        assertEquals(expectedChange, resultAfterSetting, "Change after setting should equal 2.25");
+        assertEquals(expectedChange, resultAfterGetting, "Change after getting should equal 2.25");
+        
+    }
 }

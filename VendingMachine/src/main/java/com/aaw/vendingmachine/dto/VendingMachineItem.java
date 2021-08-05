@@ -93,6 +93,10 @@ public class VendingMachineItem {
         }
         return true;
     }
-    
+
+    @Override
+    public String toString() {
+        return "VendingMachineItem{" + "itemId=" + itemId + ", itemStock=" + itemStock + ", itemPrice=" + itemPrice + ", itemName=" + itemName + '}';
+    }
     
 }

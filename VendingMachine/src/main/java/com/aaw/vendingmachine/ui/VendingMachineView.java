@@ -7,6 +7,10 @@
 
 package com.aaw.vendingmachine.ui;
 
+import com.aaw.vendingmachine.dto.Change;
+import com.aaw.vendingmachine.dto.VendingMachineItem;
+import java.util.Map;
+
 /**
  *
  * @author Austin Wong
@@ -18,5 +22,43 @@ public class VendingMachineView {
     
     public VendingMachineView(UserIO io){
         this.io = io;
+    }
+    
+    public int displayMainMenuAndGetSelection(Map<Integer, VendingMachineItem> menuIdToVendingMachineItemId){
+        
+        io.printWithBanner("MAIN MENU");
+        io.print("1 - Insert cash");
+        for (int menuId : menuIdToVendingMachineItemId.keySet()){
+            VendingMachineItem vendingMachineItem = menuIdToVendingMachineItemId.get(menuId);
+            io.print(menuId +
+                    " - " +
+                    vendingMachineItem.getItemName() + 
+                    " ($" + 
+                    vendingMachineItem.getItemPrice().toString() +
+                    ")");
+        }
+        int lastSelection = menuIdToVendingMachineItemId.size() + 2;
+        io.print(lastSelection +
+                " - " +
+                "Dispense Change");
+        io.print("");
+        return io.readInt(menuPrompt, 1, lastSelection);
+    }
+    
+    public void displayDispensedChange(Change changeToDispense){
+        io.printWithBanner("DISPENSING CHANGE");
+        io.print(changeToDispense.toString());
+        io.print("");
+    }
+    
+    public void displayErrorMessage(String errorMsg){
+        io.printWithBanner("ERROR");
+        io.print(errorMsg);
+        io.print("");
+    }
+    
+    public void displayExitMessage(){
+        io.print("Exiting...");
+        io.print("");
     }
 }

@@ -7,8 +7,12 @@
 
 package com.aaw.vendingmachine.dao;
 
+import com.aaw.vendingmachine.dto.Change;
+import com.aaw.vendingmachine.dto.NegativeChangeException;
 import com.aaw.vendingmachine.dto.VendingMachineItem;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -16,15 +20,22 @@ import java.util.List;
  */
 public interface VendingMachineDao {
 
-    VendingMachineItem addItem(VendingMachineItem item);
+    VendingMachineItem addVendingMachineItem(VendingMachineItem item);
     
-    VendingMachineItem getItem(int itemId);
+    VendingMachineItem getVendingMachineItem(int itemId);
     
-    int decrementItem(VendingMachineItem item);
+    int decrementItemStock(VendingMachineItem item);
     
-    List<VendingMachineItem> getAllItems();
+    Map<Integer, VendingMachineItem> getInventoryMap();
+    
+    List<VendingMachineItem> getAllVendingMachineItems();
     
     void loadInventory() throws VendingMachinePersistenceException;
     
     void saveInventory() throws VendingMachinePersistenceException;
+    
+    Change setUserChange(BigDecimal totalInDollars) throws NegativeChangeException;
+    
+    Change getUserChange();
+    
 }
