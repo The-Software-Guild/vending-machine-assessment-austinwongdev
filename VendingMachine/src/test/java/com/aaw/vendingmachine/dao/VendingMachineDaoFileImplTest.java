@@ -11,13 +11,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -29,25 +26,10 @@ public class VendingMachineDaoFileImplTest {
     private VendingMachineDao testDaoWithoutData;
     private final String TEST_FILE_WITHOUT_DATA = "testInventoryWithoutData.txt";
     
-    public VendingMachineDaoFileImplTest() {
-    }
-    
-    @BeforeAll
-    public static void setUpClass() {
-    }
-    
-    @AfterAll
-    public static void tearDownClass() {
-    }
-    
     @BeforeEach
     public void setUp() throws IOException {
         new FileWriter(TEST_FILE_WITHOUT_DATA);
         this.testDaoWithoutData = new VendingMachineDaoFileImpl(TEST_FILE_WITHOUT_DATA);
-    }
-    
-    @AfterEach
-    public void tearDown() {
     }
 
     @Test
