@@ -9,7 +9,6 @@ package com.aaw.vendingmachine.service;
 
 import com.aaw.vendingmachine.dao.VendingMachinePersistenceException;
 import com.aaw.vendingmachine.dto.Change;
-import com.aaw.vendingmachine.dto.NegativeChangeException;
 import com.aaw.vendingmachine.dto.VendingMachineItem;
 import java.util.List;
 import java.util.Map;
@@ -32,14 +31,14 @@ public interface VendingMachineServiceLayer {
     
     boolean isVendingMachineItemAvailable(VendingMachineItem vendingMachineItem);
     
-    Change addUserChange(String moneyToAddStr) throws NegativeChangeException;
+    Change addUserChange(String moneyToAddStr);
     
     Change getUserChange();
     
-    Change dispenseChange() throws NegativeChangeException;
+    Change dispenseChange();
     
     VendingMachineItem attemptPurchase(VendingMachineItem itemToPurchase) throws
-            InsufficientFundsException, NoItemInventoryException, NegativeChangeException;
+            InsufficientFundsException, NoItemInventoryException;
     
     int compareItemPriceToUserChange(VendingMachineItem itemToCompare);
     

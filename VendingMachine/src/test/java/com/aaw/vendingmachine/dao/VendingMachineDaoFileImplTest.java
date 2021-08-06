@@ -6,7 +6,6 @@
 package com.aaw.vendingmachine.dao;
 
 import com.aaw.vendingmachine.dto.Change;
-import com.aaw.vendingmachine.dto.NegativeChangeException;
 import com.aaw.vendingmachine.dto.VendingMachineItem;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class VendingMachineDaoFileImplTest {
     private final String TEST_FILE_WITHOUT_DATA = "testInventoryWithoutData.txt";
     
     @BeforeEach
-    public void setUp() throws IOException, NegativeChangeException {
+    public void setUp() throws IOException {
         // Reset Test File each time to make sure it's blank.
         new FileWriter(TEST_FILE_WITHOUT_DATA);
         this.testDaoWithoutData = 
@@ -108,7 +107,7 @@ public class VendingMachineDaoFileImplTest {
     }
     
     @Test
-    public void testSaveLoadInventory() throws VendingMachinePersistenceException, NegativeChangeException {
+    public void testSaveLoadInventory() throws VendingMachinePersistenceException {
         
         
         
@@ -145,7 +144,7 @@ public class VendingMachineDaoFileImplTest {
     }    
     
     @Test
-    public void testGetSetUserChange() throws NegativeChangeException{
+    public void testGetSetUserChange(){
         
         BigDecimal totalAmount = new BigDecimal("2.25");
         Change expectedChange = new Change(totalAmount);

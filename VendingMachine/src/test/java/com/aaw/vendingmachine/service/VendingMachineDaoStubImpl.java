@@ -10,7 +10,6 @@ package com.aaw.vendingmachine.service;
 import com.aaw.vendingmachine.dao.VendingMachineDao;
 import com.aaw.vendingmachine.dao.VendingMachinePersistenceException;
 import com.aaw.vendingmachine.dto.Change;
-import com.aaw.vendingmachine.dto.NegativeChangeException;
 import com.aaw.vendingmachine.dto.VendingMachineItem;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class VendingMachineDaoStubImpl implements VendingMachineDao {
     private VendingMachineItem onlyItem;
     private Change userChange;
     
-    public VendingMachineDaoStubImpl() throws NegativeChangeException{
+    public VendingMachineDaoStubImpl() {
         
         int itemId = 1;
         int itemStock = 5;
@@ -98,7 +97,7 @@ public class VendingMachineDaoStubImpl implements VendingMachineDao {
     }
     
     @Override
-    public Change setUserChange(BigDecimal newUserChangeTotal) throws NegativeChangeException{
+    public Change setUserChange(BigDecimal newUserChangeTotal){
         Change newUserChange = new Change(newUserChangeTotal);
         this.userChange = newUserChange;
         return this.userChange;

@@ -8,6 +8,8 @@
 package com.aaw.vendingmachine.ui;
 
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -48,6 +50,46 @@ public class UserIOConsoleImpl implements UserIO {
         String answer = console.nextLine();
         this.print("");
         return answer;
+    }
+    
+    /**
+     * Takes in a message to display on the console and continually prompts
+     * the user with that message until the user inputs a value in a monetary
+     * format.
+     * @param prompt - String to display to the user
+     * @return - String answer to the prompt with any leading $ sign stripped
+     */
+    @Override
+    public String readMoney(String prompt){
+        String money;
+        do{
+            money = readString(prompt);
+        }
+        while (!formattedAsMoney(money));
+        
+        if (money.startsWith("$")){
+            money = money.replace("$", "");
+        }
+        
+        return money;
+    }
+    
+    /**
+     * Takes in an input string and checks to see if it is formatted as money
+     * without a currency symbol. The String must contain at least 1 number and
+     * must follow the pattern of 0+ dollar signs ($), then 0+ digits, 
+     * then an optional ".", then 0-2 digits. Does not permit negative amounts.
+     * @param inputStr - String to check against pattern
+     * @return - True if the string meets the requirements, False otherwise
+     */
+    private boolean formattedAsMoney(String inputStr){
+        Pattern p = Pattern.compile("^(\\$?)(\\d*)(\\.?)(\\d{0,2})$");
+        Matcher m = p.matcher(inputStr);
+        if (m.find() && inputStr.length() > 0 && !inputStr.equals(".")
+                && !inputStr.equals("$") && !inputStr.equals("$.")){
+            return true;
+        }
+        return false;
     }
     
     /**

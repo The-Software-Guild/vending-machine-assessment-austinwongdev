@@ -24,8 +24,12 @@ public class VendingMachineView {
         this.io = io;
     }
     
-    public int displayMainMenuAndGetSelection(Map<Integer, VendingMachineItem> menuIdToVendingMachineItemId){
+    public int displayMainMenuAndGetSelection(
+            Map<Integer, VendingMachineItem> menuIdToVendingMachineItemId, 
+            Change balance){
         
+        this.displayAccountBalance(balance);
+        io.print("");
         io.printWithBanner("MAIN MENU");
         io.print("1 - Insert cash");
         for (int menuId : menuIdToVendingMachineItemId.keySet()){
@@ -43,6 +47,17 @@ public class VendingMachineView {
                 "Dispense Change");
         io.print("");
         return io.readInt(menuPrompt, 1, lastSelection);
+    }
+    
+    public String displayInputCashPromptAndGetAmount(){
+        String amountStr = io.readMoney(
+                "Enter total cash to input or 0 to return: ");
+        return amountStr;
+    }
+    
+    public void displayAccountBalance(Change balance){
+        io.printWithBanner("ACCOUNT BALANCE");
+        io.print("$" + balance.getTotalInDollars().toString());
     }
     
     public void displayDispensedChange(Change changeToDispense){

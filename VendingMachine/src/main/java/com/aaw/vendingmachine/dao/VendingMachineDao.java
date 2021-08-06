@@ -8,7 +8,6 @@
 package com.aaw.vendingmachine.dao;
 
 import com.aaw.vendingmachine.dto.Change;
-import com.aaw.vendingmachine.dto.NegativeChangeException;
 import com.aaw.vendingmachine.dto.VendingMachineItem;
 import java.math.BigDecimal;
 import java.util.List;
@@ -34,7 +33,7 @@ public interface VendingMachineDao {
     
     void saveInventory() throws VendingMachinePersistenceException;
     
-    Change setUserChange(BigDecimal totalInDollars) throws NegativeChangeException;
+    Change setUserChange(BigDecimal totalInDollars);
     
     Change getUserChange();
     

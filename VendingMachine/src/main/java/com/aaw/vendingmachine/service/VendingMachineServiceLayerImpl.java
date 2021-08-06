@@ -11,7 +11,6 @@ import com.aaw.vendingmachine.dao.VendingMachineAuditDao;
 import com.aaw.vendingmachine.dao.VendingMachineDao;
 import com.aaw.vendingmachine.dao.VendingMachinePersistenceException;
 import com.aaw.vendingmachine.dto.Change;
-import com.aaw.vendingmachine.dto.NegativeChangeException;
 import com.aaw.vendingmachine.dto.VendingMachineItem;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -68,7 +67,7 @@ public class VendingMachineServiceLayerImpl
     }
     
     @Override
-    public Change addUserChange(String moneyToAddStr) throws NegativeChangeException{
+    public Change addUserChange(String moneyToAddStr){
         BigDecimal moneyToAdd = new BigDecimal(moneyToAddStr);
         moneyToAdd.setScale(SCALE, ROUNDING_MODE);
         Change currentChange = dao.getUserChange();
@@ -83,7 +82,7 @@ public class VendingMachineServiceLayerImpl
     }
     
     @Override
-    public Change dispenseChange() throws NegativeChangeException{
+    public Change dispenseChange(){
         Change changeToDispense = dao.getUserChange();
         dao.setUserChange(new BigDecimal("0.00"));
         return changeToDispense;
@@ -91,7 +90,7 @@ public class VendingMachineServiceLayerImpl
     
     @Override
     public VendingMachineItem attemptPurchase(VendingMachineItem itemToPurchase)
-            throws InsufficientFundsException, NoItemInventoryException, NegativeChangeException{
+            throws InsufficientFundsException, NoItemInventoryException{
         
         if (!this.isVendingMachineItemAvailable(itemToPurchase)){
             throw new NoItemInventoryException("Item unavailable for purchase.");

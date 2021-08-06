@@ -19,6 +19,8 @@ public interface UserIO {
     
     String readString(String prompt);
     
+    String readMoney(String prompt);
+    
     int readInt(String prompt);
     
     int readInt(String prompt, int min, int max);

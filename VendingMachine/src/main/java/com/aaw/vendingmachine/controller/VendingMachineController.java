@@ -28,6 +28,11 @@ public class VendingMachineController {
     private VendingMachineView view;
     private VendingMachineServiceLayer service;
     
+    private Map<Integer, VendingMachineItem> menuIdToVendingMachineItem = 
+            new TreeMap<>();
+    private Set<Integer> itemMenuIds = new HashSet<>();
+    private int exitOption;
+    
     public VendingMachineController(
             VendingMachineView view, VendingMachineServiceLayer service){
         this.view = view;
@@ -37,36 +42,29 @@ public class VendingMachineController {
     public void run(){
         
         // Load Inventory
-        try{
-            service.loadInventory();
-        } catch (VendingMachinePersistenceException ex){
-            view.displayErrorMessage(ex.getMessage());
-            view.displayExitMessage();
+        if (!loadInventory()){
             return;
         }
 
-        // Create Mapping from Menu Choices to Item Ids
-        Map<Integer, VendingMachineItem> inventoryMap = service.getInventoryMap();
-        Map<Integer, VendingMachineItem> menuIdToVendingMachineItem = new TreeMap<>();
-        Set<Integer> purchaseMenuIds = new HashSet<>();
-        int nextAvailableMenuChoice = 2;
-        for (VendingMachineItem item : inventoryMap.values()){
-            menuIdToVendingMachineItem.put(nextAvailableMenuChoice, item);
-            purchaseMenuIds.add(nextAvailableMenuChoice);
-            nextAvailableMenuChoice += 1;
-        }
+        // Create Map from Menu Choices to Item Ids
+        createMenuChoices();
         
         // Display Main Menu and Prompt for Input
         boolean continueShopping = true;
+        Change balance = service.getUserChange();
         while (continueShopping){
-            int mainMenuSelection = view.displayMainMenuAndGetSelection(menuIdToVendingMachineItem);
+            
+            int mainMenuSelection = 
+                    view.displayMainMenuAndGetSelection(
+                            menuIdToVendingMachineItem, balance);
             
             // CashInputMenu
             if (mainMenuSelection == 1){
-                
+                balance = inputCash();
             }
+            
             // Attempt Purchase
-            else if (purchaseMenuIds.contains(mainMenuSelection)){
+            else if (itemMenuIds.contains(mainMenuSelection)){
                 VendingMachineItem itemToPurchase = menuIdToVendingMachineItem.get(mainMenuSelection);
                 try{
                     service.attemptPurchase(itemToPurchase);
@@ -75,7 +73,10 @@ public class VendingMachineController {
                     view.displayErrorMessage(ex.getMessage());
                 }
             }
-            else if (mainMenuSelection == nextAvailableMenuChoice){
+            
+            // Exit
+            else if (mainMenuSelection == exitOption){
+                
                 // Dispense Change
                 Change changeToDispense = service.dispenseChange();
                 view.displayDispensedChange(changeToDispense);
@@ -90,6 +91,36 @@ public class VendingMachineController {
                 continueShopping = false;
             }
         }
+        
         view.displayExitMessage();
+    }
+    
+    private Change inputCash(){
+        String cashToInput = view.displayInputCashPromptAndGetAmount();
+        return service.addUserChange(cashToInput);
+    }
+    
+    private boolean loadInventory(){
+        try{
+            service.loadInventory();
+        } catch (VendingMachinePersistenceException ex){
+            view.displayErrorMessage(ex.getMessage());
+            view.displayExitMessage();
+            return false;
+        }
+        return true;
+    }
+    
+    private void createMenuChoices(){
+        Map<Integer, VendingMachineItem> inventoryMap = service.getInventoryMap();
+        
+        int nextAvailableMenuChoice = 2;
+        for (VendingMachineItem item : inventoryMap.values()){
+            menuIdToVendingMachineItem.put(nextAvailableMenuChoice, item);
+            itemMenuIds.add(nextAvailableMenuChoice);
+            nextAvailableMenuChoice += 1;
+        }
+        
+        exitOption = nextAvailableMenuChoice;
     }
 }

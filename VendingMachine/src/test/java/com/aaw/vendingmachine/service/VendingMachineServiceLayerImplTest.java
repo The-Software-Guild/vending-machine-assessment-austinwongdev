@@ -8,7 +8,6 @@ package com.aaw.vendingmachine.service;
 import com.aaw.vendingmachine.dao.VendingMachineAuditDao;
 import com.aaw.vendingmachine.dao.VendingMachineDao;
 import com.aaw.vendingmachine.dto.Change;
-import com.aaw.vendingmachine.dto.NegativeChangeException;
 import com.aaw.vendingmachine.dto.VendingMachineItem;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ public class VendingMachineServiceLayerImplTest {
     
     private VendingMachineServiceLayer service;
     
-    public VendingMachineServiceLayerImplTest() throws NegativeChangeException {
+    public VendingMachineServiceLayerImplTest() {
         VendingMachineDao dao = new VendingMachineDaoStubImpl();
         VendingMachineAuditDao auditDao = new VendingMachineAuditDaoStubImpl();
         
@@ -100,17 +99,7 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testAddUserChangeNegative100Cents() throws NegativeChangeException{
-        Change userChange = service.getUserChange();
-        String moneyToAdd = "-1.00";
-        
-        assertThrows(NegativeChangeException.class,
-                () -> service.addUserChange(moneyToAdd),
-                "NegativeChangeException should have been thrown.");
-    }
-    
-    @Test
-    public void testAddUserChange0Cents() throws NegativeChangeException{
+    public void testAddUserChange0Cents(){
         Change userChange = service.getUserChange();
         String moneyToAdd = "0.00";
         
@@ -122,7 +111,7 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testAddGetUserChangeTwice185Cents() throws NegativeChangeException{
+    public void testAddGetUserChangeTwice185Cents(){
         Change userChange = service.getUserChange();
         String moneyToAdd = "1.85";
         String expectedTotal = "3.70";
@@ -138,7 +127,7 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testDispenseChange() throws NegativeChangeException{
+    public void testDispenseChange(){
         String moneyToAdd = "1.50";
         Change expectedChangeToDispense = new Change(new BigDecimal(moneyToAdd));
         Change expectedChangeRemaining = new Change(new BigDecimal("0.00"));
@@ -165,7 +154,7 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testAttemptPurchaseInStock() throws InsufficientFundsException, NoItemInventoryException, NegativeChangeException{
+    public void testAttemptPurchaseInStock() throws InsufficientFundsException, NoItemInventoryException{
         VendingMachineItem itemToPurchase = service.getVendingMachineItem(1);
         String moneyToAdd = "2.50";
         service.addUserChange(moneyToAdd);
@@ -181,7 +170,7 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testCompareItemPriceToUserMoneyExactAmount() throws NegativeChangeException{
+    public void testCompareItemPriceToUserMoneyExactAmount() {
         VendingMachineItem itemToPurchase = service.getVendingMachineItem(1);
         service.addUserChange(itemToPurchase.getItemPrice().toString());
         int expectedResult = 0;
@@ -192,7 +181,7 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testCompareItemPriceToUserMoneyInsufficientFunds() throws NegativeChangeException{
+    public void testCompareItemPriceToUserMoneyInsufficientFunds(){
         VendingMachineItem itemToPurchase = service.getVendingMachineItem(1);
         service.addUserChange("1.00");
         int expectedResult = 1;
@@ -204,7 +193,7 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testCompareItemPriceToUserMoneyNeedsChange() throws NegativeChangeException{
+    public void testCompareItemPriceToUserMoneyNeedsChange() {
         VendingMachineItem itemToPurchase = service.getVendingMachineItem(1);
         service.addUserChange("3.00");
         int expectedResult = -1;

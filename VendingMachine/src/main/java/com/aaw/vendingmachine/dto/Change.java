@@ -21,10 +21,11 @@ public class Change {
     private int dimes;
     private int nickels;
     private int pennies;
-    private BigDecimal totalInDollars;
+    private final BigDecimal totalInDollars;
     
-    public Change(BigDecimal totalInDollars) throws NegativeChangeException {
-        setTotalInDollars(totalInDollars);
+    public Change(BigDecimal totalInDollars) {
+        this.totalInDollars = totalInDollars;
+        CalculateChange();
     }
     
     private void CalculateChange(){
@@ -45,16 +46,6 @@ public class Change {
     
     public BigDecimal getTotalInDollars(){
         return this.totalInDollars;
-    }
-    
-    public final void setTotalInDollars(BigDecimal totalInDollars) 
-            throws NegativeChangeException{
-        if (totalInDollars.compareTo(new BigDecimal("0")) < 0){
-            throw new NegativeChangeException(
-                    "Cannot create change for a negative number.");
-        }
-        this.totalInDollars = totalInDollars;
-        CalculateChange();
     }
     
     private int getNumCoinsAsInt(BigDecimal totalAmount, Coins coin){
@@ -84,11 +75,11 @@ public class Change {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 23 * hash + this.quarters;
-        hash = 23 * hash + this.dimes;
-        hash = 23 * hash + this.nickels;
-        hash = 23 * hash + this.pennies;
-        hash = 23 * hash + Objects.hashCode(this.totalInDollars);
+        hash = 13 * hash + this.quarters;
+        hash = 13 * hash + this.dimes;
+        hash = 13 * hash + this.nickels;
+        hash = 13 * hash + this.pennies;
+        hash = 13 * hash + Objects.hashCode(this.totalInDollars);
         return hash;
     }
 
@@ -122,9 +113,16 @@ public class Change {
         return true;
     }
 
+    
+
     @Override
     public String toString() {
-        return "Change{" + "quarters=" + quarters + ", dimes=" + dimes + ", nickels=" + nickels + ", pennies=" + pennies + ", totalInDollars=" + totalInDollars + '}';
+        String changeStr = "Quarters: " + quarters;
+        changeStr += "\nDimes: " + dimes;
+        changeStr += "\nNickels: " + nickels;
+        changeStr += "\nPennies: " + pennies;
+        changeStr += "\nTotal: " + totalInDollars;
+        return changeStr;
     }
     
 }

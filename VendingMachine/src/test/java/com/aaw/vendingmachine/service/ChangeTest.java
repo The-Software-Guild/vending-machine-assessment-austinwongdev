@@ -6,7 +6,6 @@
 package com.aaw.vendingmachine.service;
 
 import com.aaw.vendingmachine.dto.Change;
-import com.aaw.vendingmachine.dto.NegativeChangeException;
 import java.math.BigDecimal;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -20,7 +19,7 @@ import org.junit.jupiter.api.Test;
 public class ChangeTest {
 
     @Test
-    public void test0Cents() throws NegativeChangeException {
+    public void test0Cents() {
         String amountOfMoneyStr = "0.00";
         BigDecimal amountOfMoney = new BigDecimal(amountOfMoneyStr);
         
@@ -43,13 +42,22 @@ public class ChangeTest {
         String amountOfMoneyStr = "-1.00";
         BigDecimal amountOfMoney = new BigDecimal(amountOfMoneyStr);
         
-        assertThrows(NegativeChangeException.class, 
-                () -> new Change(amountOfMoney), 
-                amountOfMoneyStr + " of money should throw NegativeChangeException.");
+        Change change = new Change(amountOfMoney);
+        
+        assertNotNull(change, "Change object should not be null.");
+        
+        int expectedQuarters = -4;
+        int expectedDimes = 0;
+        int expectedNickels = 0;
+        int expectedPennies = 0;
+        assertEquals(expectedQuarters, change.getQuarters(), amountOfMoneyStr + " dollars should have -4 quarters.");
+        assertEquals(expectedDimes, change.getDimes(), amountOfMoneyStr + " dollars should have 0 dimes.");
+        assertEquals(expectedNickels, change.getNickels(), amountOfMoneyStr + " dollars should have 0 nickels.");
+        assertEquals(expectedPennies, change.getPennies(), amountOfMoneyStr + " dollars should have 0 pennies.");
     }
     
     @Test
-    public void test1Cent() throws NegativeChangeException {
+    public void test1Cent() {
         String amountOfMoneyStr = "0.01";
         BigDecimal amountOfMoney = new BigDecimal(amountOfMoneyStr);
         
@@ -68,7 +76,7 @@ public class ChangeTest {
     }
     
     @Test
-    public void test5Cents() throws NegativeChangeException {
+    public void test5Cents() {
         String amountOfMoneyStr = "0.05";
         BigDecimal amountOfMoney = new BigDecimal(amountOfMoneyStr);
         
@@ -87,7 +95,7 @@ public class ChangeTest {
     }
     
     @Test
-    public void test10Cents() throws NegativeChangeException {
+    public void test10Cents() {
         String amountOfMoneyStr = "0.10";
         BigDecimal amountOfMoney = new BigDecimal(amountOfMoneyStr);
         
@@ -106,7 +114,7 @@ public class ChangeTest {
     }
     
     @Test
-    public void test25Cents() throws NegativeChangeException {
+    public void test25Cents() {
         String amountOfMoneyStr = "0.25";
         BigDecimal amountOfMoney = new BigDecimal(amountOfMoneyStr);
         
@@ -125,7 +133,7 @@ public class ChangeTest {
     }   
     
     @Test
-    public void test369Cents() throws NegativeChangeException {
+    public void test369Cents() {
         String amountOfMoneyStr = "3.69";
         BigDecimal amountOfMoney = new BigDecimal(amountOfMoneyStr);
         
@@ -144,28 +152,14 @@ public class ChangeTest {
     }
     
     @Test
-    public void testGetSetTotalInDollars() throws NegativeChangeException{
+    public void testGetSetTotalInDollars() {
         String amountOfMoneyStr = "3.69";
-        BigDecimal amountOfMoney = new BigDecimal(amountOfMoneyStr);
-        String amountOfMoneyStr2 = "4.00";
-        BigDecimal expectedAmountOfMoney = new BigDecimal(amountOfMoneyStr2);
-        Change change = new Change(amountOfMoney);
-        
-        change.setTotalInDollars(expectedAmountOfMoney);
+        BigDecimal expectedAmountOfMoney = new BigDecimal(amountOfMoneyStr);
+        Change change = new Change(expectedAmountOfMoney);
         BigDecimal returnedAmountOfMoney = change.getTotalInDollars();
         
-        assertNotNull(returnedAmountOfMoney, "Change should return a BigDecimal.");
-        assertEquals(expectedAmountOfMoney, returnedAmountOfMoney,
-                "Change should return 4.00.");
-        
-        int expectedQuarters = 16;
-        int expectedDimes = 0;
-        int expectedNickels = 0;
-        int expectedPennies = 0;
-        assertEquals(expectedQuarters, change.getQuarters(), amountOfMoneyStr2 + " dollars should have 16 quarters.");
-        assertEquals(expectedDimes, change.getDimes(), amountOfMoneyStr2 + " dollars should have 0 dimes.");
-        assertEquals(expectedNickels, change.getNickels(), amountOfMoneyStr2 + " dollars should have 0 nickels.");
-        assertEquals(expectedPennies, change.getPennies(), amountOfMoneyStr2 + " dollars should have 0 pennies.");
+        assertNotNull(returnedAmountOfMoney, "Total should not be null.");
+        assertEquals(expectedAmountOfMoney, returnedAmountOfMoney, "Total should be $3.69");
         
     }
     

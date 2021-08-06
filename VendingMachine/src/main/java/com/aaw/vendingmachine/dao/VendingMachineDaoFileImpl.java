@@ -8,7 +8,6 @@
 package com.aaw.vendingmachine.dao;
 
 import com.aaw.vendingmachine.dto.Change;
-import com.aaw.vendingmachine.dto.NegativeChangeException;
 import com.aaw.vendingmachine.dto.VendingMachineItem;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -35,13 +34,12 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao{
     private int nextVendingMachineItemId = 1;
     private Change userChange;
     
-    public VendingMachineDaoFileImpl() throws NegativeChangeException{
+    public VendingMachineDaoFileImpl() {
         this.userChange = new Change(new BigDecimal("0.00"));
         this.INVENTORY_FILE = "inventory.txt";
     }
     
-    public VendingMachineDaoFileImpl(String inventoryFileName) 
-            throws NegativeChangeException{
+    public VendingMachineDaoFileImpl(String inventoryFileName){
         this.userChange = new Change(new BigDecimal("0.00"));
         this.INVENTORY_FILE = inventoryFileName;
     }
@@ -144,8 +142,7 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao{
     }
     
     @Override
-    public Change setUserChange(BigDecimal newUserChangeTotal) 
-            throws NegativeChangeException{
+    public Change setUserChange(BigDecimal newUserChangeTotal){
         Change newUserChange = new Change(newUserChangeTotal);
         this.userChange = newUserChange;
         return this.userChange;
