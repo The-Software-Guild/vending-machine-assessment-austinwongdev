@@ -14,7 +14,6 @@ import com.aaw.vendingmachine.dto.Change;
 import com.aaw.vendingmachine.dto.VendingMachineItem;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,11 +59,6 @@ public class VendingMachineServiceLayerImpl
     @Override
     public Map<Integer, VendingMachineItem> getInventoryMap(){
         return dao.getInventoryMap();
-    }
-    
-    @Override
-    public List<VendingMachineItem> getAllVendingMachineItems(){
-        return dao.getAllVendingMachineItems();
     }
     
     @Override

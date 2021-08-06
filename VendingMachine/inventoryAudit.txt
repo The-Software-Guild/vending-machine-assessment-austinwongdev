@@ -13,3 +13,32 @@
 2021-08-05T18:48:58.719569200 - $0 inserted.
 2021-08-05T18:49:02.779938100 - $2.50 dispensed.
 2021-08-05T18:49:04.861089300 - Inventory Saved
+2021-08-05T19:49:57.858478400 - Inventory Loaded
+2021-08-05T19:50:02.224633500 - Insufficient funds for purchase.
+2021-08-05T19:50:07.115530500 - $0.01 inserted.
+2021-08-05T19:50:10.147430200 - Insufficient funds for purchase.
+2021-08-05T19:50:12.169240100 - Insufficient funds for purchase.
+2021-08-05T19:50:26.935606700 - $2.50 inserted.
+2021-08-05T19:50:30.880769200 - Gummy Bears purchased.
+2021-08-05T19:50:30.880769200 - $0.51 dispensed.
+2021-08-05T19:50:42.158416800 - Insufficient funds for purchase.
+2021-08-05T19:50:50.300920500 - $3.00 inserted.
+2021-08-05T19:50:52.307508400 - Oreos purchased.
+2021-08-05T19:50:52.307508400 - $0.25 dispensed.
+2021-08-05T19:50:54.662773900 - Out of stock item selected.
+2021-08-05T19:51:02.528148600 - $2.05 inserted.
+2021-08-05T19:51:07.320611700 - $2.05 dispensed.
+2021-08-05T19:51:10.452778900 - Inventory Saved
+2021-08-05T19:53:25.318743100 - Inventory Loaded
+2021-08-05T19:53:35.720206600 - Insufficient funds for purchase.
+2021-08-05T19:53:42.407696 - $5 inserted.
+2021-08-05T19:53:44.954471400 - Chocolate Chip Cookies purchased.
+2021-08-05T19:53:44.954471400 - $2.00 dispensed.
+2021-08-05T19:53:48.897834200 - Out of stock item selected.
+2021-08-05T19:53:51.152612300 - Out of stock item selected.
+2021-08-05T19:53:52.979346300 - Insufficient funds for purchase.
+2021-08-05T19:53:55.187088700 - $0.00 dispensed.
+2021-08-05T19:53:56.399353 - Inventory Saved
+2021-08-05T19:54:01.539309200 - Inventory Loaded
+2021-08-05T19:54:04.643005 - $0.00 dispensed.
+2021-08-05T19:54:05.545852 - Inventory Saved

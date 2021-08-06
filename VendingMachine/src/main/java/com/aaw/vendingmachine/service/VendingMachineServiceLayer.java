@@ -10,7 +10,6 @@ package com.aaw.vendingmachine.service;
 import com.aaw.vendingmachine.dao.VendingMachinePersistenceException;
 import com.aaw.vendingmachine.dto.Change;
 import com.aaw.vendingmachine.dto.VendingMachineItem;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,8 +23,6 @@ public interface VendingMachineServiceLayer {
     void saveInventory() throws VendingMachinePersistenceException;
     
     Map<Integer, VendingMachineItem> getInventoryMap();
-    
-    List<VendingMachineItem> getAllVendingMachineItems();
     
     VendingMachineItem getVendingMachineItem(int vendingMachineItemId);
     

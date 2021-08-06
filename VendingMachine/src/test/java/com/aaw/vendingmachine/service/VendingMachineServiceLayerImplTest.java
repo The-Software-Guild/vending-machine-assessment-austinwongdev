@@ -7,11 +7,10 @@ package com.aaw.vendingmachine.service;
 
 import com.aaw.vendingmachine.dao.VendingMachineAuditDao;
 import com.aaw.vendingmachine.dao.VendingMachineDao;
+import com.aaw.vendingmachine.dao.VendingMachinePersistenceException;
 import com.aaw.vendingmachine.dto.Change;
 import com.aaw.vendingmachine.dto.VendingMachineItem;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -61,25 +60,6 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testGetAllVendingMachineItems(){
-        int item1Id = 1;
-        int item1Stock = 5;
-        BigDecimal item1Price = new BigDecimal("2.25");
-        String item1Name = "Cheetos";
-        VendingMachineItem item1 = 
-                new VendingMachineItem(item1Id, item1Name, item1Price, item1Stock);
-        List<VendingMachineItem> expectedItems = new ArrayList<>();
-        expectedItems.add(item1);
-        
-        List<VendingMachineItem> returnedItems = service.getAllVendingMachineItems();
-        
-        assertNotNull(returnedItems, 
-                "List of vending machine items should not be null.");
-        assertEquals(expectedItems, returnedItems, 
-                "List of vending machine items should consist of Cheetos.");
-    }
-    
-    @Test
     public void testIsVendingMachineItemAvailableTrue(){
         VendingMachineItem item1 = service.getVendingMachineItem(1);
         
@@ -99,7 +79,7 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testAddUserChange0Cents(){
+    public void testAddUserChange0Cents() throws VendingMachinePersistenceException{
         Change userChange = service.getUserChange();
         String moneyToAdd = "0.00";
         
@@ -111,7 +91,7 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testAddGetUserChangeTwice185Cents(){
+    public void testAddGetUserChangeTwice185Cents() throws VendingMachinePersistenceException{
         Change userChange = service.getUserChange();
         String moneyToAdd = "1.85";
         String expectedTotal = "3.70";
@@ -127,7 +107,7 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testDispenseChange(){
+    public void testDispenseChange() throws VendingMachinePersistenceException{
         String moneyToAdd = "1.50";
         Change expectedChangeToDispense = new Change(new BigDecimal(moneyToAdd));
         Change expectedChangeRemaining = new Change(new BigDecimal("0.00"));
@@ -154,7 +134,7 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testAttemptPurchaseInStock() throws InsufficientFundsException, NoItemInventoryException{
+    public void testAttemptPurchaseInStock() throws InsufficientFundsException, NoItemInventoryException, VendingMachinePersistenceException{
         VendingMachineItem itemToPurchase = service.getVendingMachineItem(1);
         String moneyToAdd = "2.50";
         service.addUserChange(moneyToAdd);
@@ -172,7 +152,7 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testCompareItemPriceToUserMoneyExactAmount() {
+    public void testCompareItemPriceToUserMoneyExactAmount() throws VendingMachinePersistenceException {
         VendingMachineItem itemToPurchase = service.getVendingMachineItem(1);
         service.addUserChange(itemToPurchase.getItemPrice().toString());
         int expectedResult = 0;
@@ -183,7 +163,7 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testCompareItemPriceToUserMoneyInsufficientFunds(){
+    public void testCompareItemPriceToUserMoneyInsufficientFunds() throws VendingMachinePersistenceException{
         VendingMachineItem itemToPurchase = service.getVendingMachineItem(1);
         service.addUserChange("1.00");
         int expectedResult = 1;
@@ -195,7 +175,7 @@ public class VendingMachineServiceLayerImplTest {
     }
     
     @Test
-    public void testCompareItemPriceToUserMoneyNeedsChange() {
+    public void testCompareItemPriceToUserMoneyNeedsChange() throws VendingMachinePersistenceException {
         VendingMachineItem itemToPurchase = service.getVendingMachineItem(1);
         service.addUserChange("3.00");
         int expectedResult = -1;
