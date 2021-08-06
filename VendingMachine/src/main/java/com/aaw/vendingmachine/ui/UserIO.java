@@ -24,4 +24,6 @@ public interface UserIO {
     int readInt(String prompt);
     
     int readInt(String prompt, int min, int max);
+    
+    void pressEnterToContinue();
 }

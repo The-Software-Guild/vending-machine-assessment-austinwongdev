@@ -85,11 +85,8 @@ public class UserIOConsoleImpl implements UserIO {
     private boolean formattedAsMoney(String inputStr){
         Pattern p = Pattern.compile("^(\\$?)(\\d*)(\\.?)(\\d{0,2})$");
         Matcher m = p.matcher(inputStr);
-        if (m.find() && inputStr.length() > 0 && !inputStr.equals(".")
-                && !inputStr.equals("$") && !inputStr.equals("$.")){
-            return true;
-        }
-        return false;
+        return m.find() && inputStr.length() > 0 && !inputStr.equals(".")
+                && !inputStr.equals("$") && !inputStr.equals("$.");
     }
     
     /**
@@ -131,6 +128,12 @@ public class UserIOConsoleImpl implements UserIO {
             num = readInt(prompt);
         } while (num < min || num > max);
         return num;
+    }
+    
+    @Override
+    public void pressEnterToContinue(){
+        this.readString("Press Enter to continue.");
+        this.print("");
     }
     
 }

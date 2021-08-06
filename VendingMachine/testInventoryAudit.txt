@@ -1,1 +1,2 @@
-Cheetos purchased at 12:00pm 8/5/2021
+2021-08-05T19:12:20.836886400 - Cheetos purchased
+2021-08-05T19:12:20.852506500 - Gummy Bears purchased

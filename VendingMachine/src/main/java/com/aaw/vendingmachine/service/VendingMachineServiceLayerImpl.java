@@ -37,12 +37,24 @@ public class VendingMachineServiceLayerImpl
     
     @Override
     public void loadInventory() throws VendingMachinePersistenceException{
-        dao.loadInventory();
+        try{
+            dao.loadInventory();
+        } catch (VendingMachinePersistenceException ex){
+            auditDao.writeAuditEntry(ex.getMessage());
+            throw new VendingMachinePersistenceException(ex.getMessage());
+        }
+        auditDao.writeAuditEntry("Inventory Loaded");
     }
     
     @Override
     public void saveInventory() throws VendingMachinePersistenceException{
-        dao.saveInventory();
+        try{
+            dao.saveInventory();
+        } catch (VendingMachinePersistenceException ex){
+            auditDao.writeAuditEntry(ex.getMessage());
+            throw new VendingMachinePersistenceException(ex.getMessage());
+        }
+        auditDao.writeAuditEntry("Inventory Saved");
     }
     
     @Override
@@ -67,12 +79,13 @@ public class VendingMachineServiceLayerImpl
     }
     
     @Override
-    public Change addUserChange(String moneyToAddStr){
+    public Change addUserChange(String moneyToAddStr) throws VendingMachinePersistenceException{
         BigDecimal moneyToAdd = new BigDecimal(moneyToAddStr);
         moneyToAdd.setScale(SCALE, ROUNDING_MODE);
         Change currentChange = dao.getUserChange();
         BigDecimal newTotal = currentChange.getTotalInDollars().add(moneyToAdd);
         Change newChange = dao.setUserChange(newTotal);
+        auditDao.writeAuditEntry("$" + moneyToAddStr + " inserted.");
         return newChange;
     }
     
@@ -82,17 +95,20 @@ public class VendingMachineServiceLayerImpl
     }
     
     @Override
-    public Change dispenseChange(){
+    public Change dispenseChange() throws VendingMachinePersistenceException{
         Change changeToDispense = dao.getUserChange();
         dao.setUserChange(new BigDecimal("0.00"));
+        auditDao.writeAuditEntry("$" + changeToDispense.getTotalInDollars().toString() + " dispensed.");
         return changeToDispense;
     }
     
     @Override
-    public VendingMachineItem attemptPurchase(VendingMachineItem itemToPurchase)
-            throws InsufficientFundsException, NoItemInventoryException{
+    public Change attemptPurchase(VendingMachineItem itemToPurchase)
+            throws InsufficientFundsException, NoItemInventoryException,
+            VendingMachinePersistenceException{
         
         if (!this.isVendingMachineItemAvailable(itemToPurchase)){
+            auditDao.writeAuditEntry("Out of stock item selected.");
             throw new NoItemInventoryException("Item unavailable for purchase.");
         }
         
@@ -102,25 +118,29 @@ public class VendingMachineServiceLayerImpl
             
             // Not enough funds to purchase item
             case 1:
-                throw new InsufficientFundsException("Insufficient funds to purchase item.");
+                auditDao.writeAuditEntry("Insufficient funds for purchase.");
+                throw new InsufficientFundsException("Insufficient funds.");
             
             // Purchase item for exact amount
             case 0:
+                auditDao.writeAuditEntry(itemToPurchase.getItemName() + " purchased.");
                 dao.setUserChange(new BigDecimal("0.00"));
                 dao.decrementItemStock(itemToPurchase);
-                return itemToPurchase;
+                break;
                 
             // Purchase item and update change remaining
             case -1:
+                auditDao.writeAuditEntry(itemToPurchase.getItemName() + " purchased.");
                 BigDecimal currentUserTotalMoney = this.getUserChange().getTotalInDollars();
                 BigDecimal newUserTotalMoney = currentUserTotalMoney.subtract(itemToPurchase.getItemPrice());
                 dao.setUserChange(newUserTotalMoney);
                 dao.decrementItemStock(itemToPurchase);
-                return itemToPurchase;
+                break;
                 
             default:
                 return null;
         }
+        return dao.getUserChange();
     }
     
     @Override

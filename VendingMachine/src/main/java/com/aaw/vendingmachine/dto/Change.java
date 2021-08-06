@@ -113,8 +113,6 @@ public class Change {
         return true;
     }
 
-    
-
     @Override
     public String toString() {
         String changeStr = "Quarters: " + quarters;

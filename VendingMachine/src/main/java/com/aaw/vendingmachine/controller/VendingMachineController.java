@@ -34,7 +34,8 @@ public class VendingMachineController {
     private int exitOption;
     
     public VendingMachineController(
-            VendingMachineView view, VendingMachineServiceLayer service){
+            VendingMachineView view, 
+            VendingMachineServiceLayer service){
         this.view = view;
         this.service = service;
     }
@@ -49,53 +50,65 @@ public class VendingMachineController {
         // Create Map from Menu Choices to Item Ids
         createMenuChoices();
         
-        // Display Main Menu and Prompt for Input
-        boolean continueShopping = true;
-        Change balance = service.getUserChange();
-        while (continueShopping){
+        
+        try{    
+            // Loop through Main Menu until done
+            mainMenu();
             
+            // Dispense Change
+            Change changeToDispense = service.dispenseChange();
+            view.displayDispensedChangeAndWait(changeToDispense);
+            
+            // Save Inventory
+            service.saveInventory();
+            
+        } catch (VendingMachinePersistenceException ex){
+            view.displayErrorMessageAndWait(ex.getMessage());
+        }
+        
+        // Exit
+        view.displayExitMessage();
+    }
+    
+    private void mainMenu() throws VendingMachinePersistenceException{
+        
+        Change balance;
+        boolean continueShopping = true;
+        
+        while (continueShopping){
+
+            // Update balance and display main menu
+            balance = service.getUserChange();
             int mainMenuSelection = 
                     view.displayMainMenuAndGetSelection(
                             menuIdToVendingMachineItem, balance);
-            
+
             // CashInputMenu
             if (mainMenuSelection == 1){
                 balance = inputCash();
             }
-            
+
             // Attempt Purchase
             else if (itemMenuIds.contains(mainMenuSelection)){
                 VendingMachineItem itemToPurchase = menuIdToVendingMachineItem.get(mainMenuSelection);
                 try{
-                    service.attemptPurchase(itemToPurchase);
+                    balance = service.attemptPurchase(itemToPurchase);
+                    view.displayPurchaseSuccessMessage(itemToPurchase);
+                    view.displayDispensedChangeAndWait(service.dispenseChange());
                 }
                 catch (InsufficientFundsException | NoItemInventoryException ex){
-                    view.displayErrorMessage(ex.getMessage());
+                    view.displayErrorMessageAndWait(ex.getMessage());
                 }
             }
-            
+
             // Exit
             else if (mainMenuSelection == exitOption){
-                
-                // Dispense Change
-                Change changeToDispense = service.dispenseChange();
-                view.displayDispensedChange(changeToDispense);
-
-                // Save Inventory
-                try{
-                    service.saveInventory();
-                } catch (VendingMachinePersistenceException ex){
-                    view.displayErrorMessage(ex.getMessage());
-                }
-                
                 continueShopping = false;
             }
         }
-        
-        view.displayExitMessage();
     }
     
-    private Change inputCash(){
+    private Change inputCash() throws VendingMachinePersistenceException{
         String cashToInput = view.displayInputCashPromptAndGetAmount();
         return service.addUserChange(cashToInput);
     }
@@ -104,13 +117,16 @@ public class VendingMachineController {
         try{
             service.loadInventory();
         } catch (VendingMachinePersistenceException ex){
-            view.displayErrorMessage(ex.getMessage());
+            view.displayErrorMessageAndWait(ex.getMessage());
             view.displayExitMessage();
             return false;
         }
         return true;
     }
     
+    /**
+     * Creates a map from menu options to VendingMachineItems
+     */
     private void createMenuChoices(){
         Map<Integer, VendingMachineItem> inventoryMap = service.getInventoryMap();
         

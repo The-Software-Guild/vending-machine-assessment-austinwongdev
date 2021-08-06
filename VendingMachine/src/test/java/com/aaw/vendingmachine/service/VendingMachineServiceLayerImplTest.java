@@ -159,14 +159,16 @@ public class VendingMachineServiceLayerImplTest {
         String moneyToAdd = "2.50";
         service.addUserChange(moneyToAdd);
         Change expectedChangeRemaining = new Change(new BigDecimal("0.25"));
+        int expectedRemainingStock = itemToPurchase.getItemStock() - 1;
         
-        VendingMachineItem purchasedItem = service.attemptPurchase(itemToPurchase);
-        Change remainingChange = service.getUserChange();
+        Change remainingChange = service.attemptPurchase(itemToPurchase);
+        int remainingStock = service.getVendingMachineItem(1).getItemStock();
         
-        assertNotNull(purchasedItem, "Should have returned a VendingMachineItem.");
-        assertEquals(itemToPurchase, purchasedItem, "Purchased item should be Cheetos.");
+        assertNotNull(remainingChange, "Should have returned a Change object.");
         assertEquals(expectedChangeRemaining, remainingChange,
                 "User should have 25 cents remaining.");
+        assertEquals(expectedRemainingStock, remainingStock,
+                "Cheetos stock should have decreased by 1.");
     }
     
     @Test

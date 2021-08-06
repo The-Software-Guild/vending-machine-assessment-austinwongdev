@@ -130,14 +130,12 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao{
                     "Could not save vending machine inventory data.", e);
         }
         
-        String vendingMachineItemAsText;
-        List<VendingMachineItem> vendingMachineItemList = 
-                this.getAllVendingMachineItems();
-        for (VendingMachineItem currentItem : vendingMachineItemList){
-            vendingMachineItemAsText = marshallItem(currentItem);
-            out.println(vendingMachineItemAsText);
-            out.flush();
-        }
+        this.getAllVendingMachineItems().stream()
+                .map((i) -> marshallItem(i))
+                .forEach((s) -> {
+                    out.println(s);
+                    out.flush();
+                });
         out.close();
     }
     

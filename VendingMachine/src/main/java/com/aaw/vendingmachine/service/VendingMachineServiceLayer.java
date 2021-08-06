@@ -31,14 +31,15 @@ public interface VendingMachineServiceLayer {
     
     boolean isVendingMachineItemAvailable(VendingMachineItem vendingMachineItem);
     
-    Change addUserChange(String moneyToAddStr);
+    Change addUserChange(String moneyToAddStr) throws VendingMachinePersistenceException;
     
     Change getUserChange();
     
-    Change dispenseChange();
+    Change dispenseChange() throws VendingMachinePersistenceException;
     
-    VendingMachineItem attemptPurchase(VendingMachineItem itemToPurchase) throws
-            InsufficientFundsException, NoItemInventoryException;
+    Change attemptPurchase(VendingMachineItem itemToPurchase) throws
+            InsufficientFundsException, NoItemInventoryException,
+            VendingMachinePersistenceException;
     
     int compareItemPriceToUserChange(VendingMachineItem itemToCompare);
     

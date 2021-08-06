@@ -10,6 +10,7 @@ package com.aaw.vendingmachine.dao;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -38,7 +39,7 @@ public class VendingMachineAuditDaoFileImpl implements VendingMachineAuditDao {
             throw new VendingMachinePersistenceException("Could not save vending machine audit data.", e);
         }
         
-        out.println(entry);
+        out.println(LocalDateTime.now() + " - " + entry);
         out.flush();
         out.close();
     }

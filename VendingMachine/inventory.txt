@@ -1,0 +1,3 @@
+Cheetos::1.50::4
+Gummy Bears::2.00::10
+Oreos::2.75::1

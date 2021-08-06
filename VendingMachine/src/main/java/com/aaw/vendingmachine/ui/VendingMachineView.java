@@ -32,6 +32,7 @@ public class VendingMachineView {
         io.print("");
         io.printWithBanner("MAIN MENU");
         io.print("1 - Insert cash");
+        
         for (int menuId : menuIdToVendingMachineItemId.keySet()){
             VendingMachineItem vendingMachineItem = menuIdToVendingMachineItemId.get(menuId);
             io.print(menuId +
@@ -44,7 +45,7 @@ public class VendingMachineView {
         int lastSelection = menuIdToVendingMachineItemId.size() + 2;
         io.print(lastSelection +
                 " - " +
-                "Dispense Change");
+                "Dispense Change and Exit");
         io.print("");
         return io.readInt(menuPrompt, 1, lastSelection);
     }
@@ -60,16 +61,23 @@ public class VendingMachineView {
         io.print("$" + balance.getTotalInDollars().toString());
     }
     
-    public void displayDispensedChange(Change changeToDispense){
-        io.printWithBanner("DISPENSING CHANGE");
-        io.print(changeToDispense.toString());
+    public void displayPurchaseSuccessMessage(VendingMachineItem purchasedItem){
+        io.print("Enjoy your " + purchasedItem.getItemName());
         io.print("");
     }
     
-    public void displayErrorMessage(String errorMsg){
+    public void displayDispensedChangeAndWait(Change changeToDispense){
+        io.printWithBanner("DISPENSING CHANGE");
+        io.print(changeToDispense.toString());
+        io.print("");
+        io.pressEnterToContinue();
+    }
+    
+    public void displayErrorMessageAndWait(String errorMsg){
         io.printWithBanner("ERROR");
         io.print(errorMsg);
         io.print("");
+        io.pressEnterToContinue();
     }
     
     public void displayExitMessage(){
