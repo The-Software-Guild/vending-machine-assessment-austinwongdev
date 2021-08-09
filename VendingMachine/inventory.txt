@@ -1,4 +1,4 @@
-Cheetos::1.50::4
-Gummy Bears::2.00::9
+Cheetos::1.50::0
+Gummy Bears::2.00::7
 Oreos::2.75::0
 Chocolate Chip Cookies::3.00::0
